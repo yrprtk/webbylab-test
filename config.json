@@ -1,0 +1,11 @@
+{
+    "listenPort": "{{PORT}}",
+    "db": {
+        "name": "{{DB_NAME}}",
+        "user": "{{DB_USER}}",
+        "pass": "{{DB_PASS}}",
+        "host": "{{DB_HOST}}",
+        "port": "{{DB_PORT}}",
+        "dialect": "postgres"
+    }
+}

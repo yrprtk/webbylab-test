@@ -1,0 +1,25 @@
+services:
+  app:
+    container_name: app
+    build: .
+    restart: always
+    links:
+      - postgres
+    ports:
+      - "3000:3000"
+    volumes: 
+      - ./combined.log:/usr/src/app/combined.log
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes: 
+      - postgresdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: postgres
+      POSTGRES_DB: webbylab-test
+volumes:
+  postgresdata:

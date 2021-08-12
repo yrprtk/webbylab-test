@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>File uploading</title>
+</head>
+<body>
+    <label for="file">load file: <input id="file" type="file"></label>
+    <button id="upload">Upload</button>
+    <button id="cancel">Cancel</button>
+    <div id="progress-bar" style="width: 0; height: 1rem; background-color: aquamarine;"></div>
+</body>
+</html>
+
+<script src="https://unpkg.com/rxjs@6.5.2/bundles/rxjs.umd.min.js"></script>
+<script type="text/javascript">
+    const { fromEvent, Observable } = rxjs;
+    const { map, switchMap, filter, takeUntil, exhaustMap } = rxjs.operators;
+
+    const input = document.querySelector('#file');
+    const uploadBtn = document.querySelector('#upload');
+    const progressBar = document.querySelector('#progress-bar');
+    const cancelBtn = document.querySelector('#cancel');
+
+    const fromUploadBtn = fromEvent(uploadBtn, 'click');
+    const fromCancelBtn = fromEvent(cancelBtn, 'click');
+
+    fromEvent(input, 'change').pipe(
+        switchMap(() => fromUploadBtn),
+        map(() => input.files[0]),
+        filter(file => !!file),
+        map(file => createFormData(file)),
+        exhaustMap(data => upload(data).pipe(
+            takeUntil(fromCancelBtn)
+        ))
+    ).subscribe({
+        next: width => setProgressBarWidth(width)
+    });
+
+    function setProgressBarWidth(width) {
+        progressBar.style.width = `${width}%`;
+    }
+
+    function createFormData(file) {
+        const form = new FormData();
+        form.append('file', file);
+        return form;
+    }
+
+    function upload(data) {
+        return new Observable(observer => {
+            const xhr = new XMLHttpRequest();
+
+            xhr.upload.onprogress = e => {
+                const progress = e.loaded / e.total * 100;
+                observer.next(progress);
+            };
+
+            xhr.onerror = e => observer.error(e);
+            xhr.onload = () => observer.complete();
+
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    alert(xhr.responseText);
+                };
+            };
+
+            xhr.open('POST', '/api/v1/upload', true);
+            xhr.send(data);
+
+            
+
+            return () => {setProgressBarWidth(0); xhr.abort()};
+        });
+    }
+</script>

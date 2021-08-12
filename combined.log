@@ -1,0 +1,10 @@
+Aug-12-2021 20:05:20: info: 	Connection has been established successfully.
+Aug-12-2021 20:05:20: info: 	All models were synchronized successfully.
+Aug-12-2021 20:05:20: info: 	Server start in 3000 port
+Aug-12-2021 20:08:53: error: 	Error in postFilm: SequelizeValidationError: notNull Violation: films.actors cannot be null
+Aug-12-2021 20:09:31: info: 	Connection has been established successfully.
+Aug-12-2021 20:09:31: info: 	All models were synchronized successfully.
+Aug-12-2021 20:09:31: info: 	Server start in 3000 port
+Aug-12-2021 20:28:13: info: 	Connection has been established successfully.
+Aug-12-2021 20:28:13: info: 	All models were synchronized successfully.
+Aug-12-2021 20:28:13: info: 	Server start in 3000 port
