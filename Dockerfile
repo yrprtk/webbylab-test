@@ -4,5 +4,4 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY --chown=node:node . /usr/src/app
 RUN npm ci --only=production
-USER node
 CMD [ "node", "index.js" ]
